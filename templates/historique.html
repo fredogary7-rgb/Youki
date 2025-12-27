@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historique</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Poppins,sans-serif;
+    background:#FFD700;
+}
+
+/* HEADER */
+.header{
+    background:#000;
+    color:#fff;
+    padding:16px;
+}
+
+.header-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.back{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#fff;
+    color:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+}
+
+/* TABS */
+.tabs{
+    display:flex;
+    gap:10px;
+    padding:14px;
+}
+
+.tab{
+    flex:1;
+    text-align:center;
+    padding:10px;
+    border-radius:12px;
+    background:#eee;
+    color:#777;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:#fff;
+    color:#000;
+    font-weight:bold;
+}
+
+/* CONTENT */
+.container{
+    padding:14px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+/* ITEM */
+.item{
+    background:#fff;
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.left h4{
+    margin:0;
+    font-size:15px;
+}
+
+.left p{
+    margin:4px 0;
+    font-size:13px;
+    color:#777;
+}
+
+.amount{
+    font-weight:bold;
+}
+
+.green{color:#16a34a;}
+.red{color:#dc2626;}
+.orange{color:#f59e0b;}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <a href="javascript:history.back()" class="back">←</a>
+        <h2>Historique</h2>
+    </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+    <div class="tab active" onclick="showTab('tout')">Tout</div>
+    <div class="tab" onclick="showTab('depots')">Dépôts</div>
+    <div class="tab" onclick="showTab('retraits')">Retraits</div>
+    <div class="tab" onclick="showTab('revenus')">Revenus</div>
+</div>
+
+<div class="container">
+
+<!-- TOUT -->
+<div id="tout" class="section active">
+
+    {% for d in depots %}
+    <div class="item">
+        <div class="left">
+            <h4>Dépôt</h4>
+            <p>{{ d.statut }}</p>
+        </div>
+        <div class="amount green">
+            +{{ "{:,.0f}".format(d.montant) }} XOF
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for r in retraits %}
+    <div class="item">
+        <div class="left">
+            <h4>Retrait</h4>
+            <p>{{ r.statut }}</p>
+        </div>
+        <div class="amount red">
+            -{{ "{:,.0f}".format(r.montant) }} XOF
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<!-- DEPOTS -->
+<div id="depots" class="section">
+    {% for d in depots %}
+    <div class="item">
+        <div class="left">
+            <h4>Dépôt</h4>
+            <p>Statut : {{ d.statut }}</p>
+        </div>
+        <div class="amount green">
+            +{{ "{:,.0f}".format(d.montant) }} XOF
+        </div>
+    </div>
+    {% else %}
+    <p>Aucun dépôt.</p>
+    {% endfor %}
+</div>
+
+<!-- RETRAITS -->
+<div id="retraits" class="section">
+    {% for r in retraits %}
+    <div class="item">
+        <div class="left">
+            <h4>Retrait</h4>
+            <p>Statut : {{ r.statut }}</p>
+        </div>
+        <div class="amount red">
+            -{{ "{:,.0f}".format(r.montant) }} XOF
+        </div>
+    </div>
+    {% else %}
+    <p>Aucun retrait.</p>
+    {% endfor %}
+</div>
+
+<!-- REVENUS -->
+<div id="revenus" class="section">
+    {% for inv in investissements %}
+    <div class="item">
+        <div class="left">
+            <h4>Revenu journalier</h4>
+            <p>{{ inv.jours_restants }} jours restants</p>
+        </div>
+        <div class="amount green">
+            +{{ "{:,.0f}".format(inv.montant) }} XOF
+        </div>
+    </div>
+    {% else %}
+    <p>Aucun revenu.</p>
+    {% endfor %}
+</div>
+
+</div>
+
+<script>
+function showTab(id){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+
+    event.target.classList.add('active');
+    document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>

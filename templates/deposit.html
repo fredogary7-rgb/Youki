@@ -1,0 +1,109 @@
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Recharger</title>
+
+    <style>
+        body{font-family:'Poppins',sans-serif;background:#f5f7fa;margin:0}
+        .header{background:#000;color:#FFD700;padding:14px 16px;font-weight:600;display:flex;align-items:center}
+        .header span{margin-left:10px}
+        .container{padding:18px}
+        h3{margin:10px 0 6px;font-size:18px}
+        .info-box{background:#FFD700;color:#000;padding:12px;border-radius:8px;text-align:center}
+        .amount-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+        .amount-btn{width:30%;padding:12px 0;border-radius:20px;text-align:center;background:#fff;border:1px solid #ddd;cursor:pointer}
+        .amount-btn:hover{transform:scale(1.02)}
+        .form-row{margin-top:12px}
+        input{width:100%;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:14px;box-sizing:border-box}
+        .reference-box{margin-top:18px;background:#FFD700;color:#000;padding:12px;border-radius:10px;text-align:center;font-weight:600}
+        .btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+        .btn-submit{flex:1;background:#FFD700;color:#000;padding:14px;border:none;border-radius:26px;font-weight:700;cursor:pointer}
+        .btn-pay{flex:1;background:#FFD700;color:#000;padding:14px;border:none;border-radius:26px;font-weight:700;cursor:pointer}
+        .rules{margin-top:22px;background:#FFD700;padding:14px;border-radius:10px}
+        .rules p{margin:8px 0;color:#555}
+        @media(max-width:480px){.amount-btn{width:47%}}
+    </style>
+</head>
+<body>
+
+    <div class="header">← <span>Recharger</span></div>
+
+    <div class="container">
+
+        <h3>Montant du dépôt <small>(Minimum 3 000 FCFA)</small></h3>
+
+        <div class="info-box">
+            Si votre dépôt n'apparaît pas, soumettez la référence reçue après paiement.
+        </div>
+
+        <!-- Boutons rapides -->
+        <div class="amount-grid">
+            <div class="amount-btn" onclick="setAmount(3000)">3000</div>
+            <div class="amount-btn" onclick="setAmount(8000)">8000</div>
+            <div class="amount-btn" onclick="setAmount(20000)">20000</div>
+            <div class="amount-btn" onclick="setAmount(40000)">40000</div>
+            <div class="amount-btn" onclick="setAmount(90000)">90000</div>
+            <div class="amount-btn" onclick="setAmount(180000)">180000</div>
+            <div class="amount-btn" onclick="setAmount(400000)">400000</div>
+            <div class="amount-btn" onclick="setAmount(800000)">800000</div>
+        </div>
+
+        <form action="/submit_reference" method="POST">
+
+            <!-- Montant -->
+            <div class="form-row">
+                <input type="number" id="montant" name="montant"
+                       placeholder="Montant du dépôt"
+                       min="3000" required>
+            </div>
+
+            <!-- Numéro du payeur -->
+            <div class="form-row">
+                <input type="tel" id="phone" name="phone"
+                       placeholder="Numéro du payeur"
+                       required>
+            </div>
+
+            <!-- Référence -->
+            <div class="reference-box">Référence du paiement</div>
+
+            <div class="form-row">
+                <input type="text" id="reference" name="reference"
+                       placeholder="Saisissez ici la référence du paiement"
+                       required>
+            </div>
+
+            <div class="btns">
+                <!-- Soumettre la référence au serveur -->
+                <button type="submit" class="btn-submit">Soumettre la référence</button>
+
+                <!-- Payer en ligne -->
+                <button type="button" class="btn-pay" onclick="payerEnLigne()">
+                    Payer en ligne
+                </button>
+            </div>
+        </form>
+
+        <div class="rules">
+            <h4>Règles de dépôt</h4>
+            <p>1. Le montant minimum est 3 000 FCFA.</p>
+            <p>2. Payez d’abord en ligne.</p>
+            <p>3. Revenez soumettre la référence du paiement.</p>
+        </div>
+
+    </div>
+
+    <script>
+        const PAYMENT_URL = "https://my.moneyfusion.net/694ec4cd98fe6dbde000a3d6";
+
+        function setAmount(value){
+            document.getElementById("montant").value = value;
+        }
+
+        function payerEnLigne(){
+            window.open(PAYMENT_URL, "_blank");
+        }
+    </script>
+
+</body>

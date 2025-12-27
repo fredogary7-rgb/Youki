@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 420px;
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+
+    .logo {
+        width: 140px;
+        margin: 40px auto;
+    }
+
+    .label {
+        text-align: left;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+        margin-top: 22px;
+    }
+
+    .input-field {
+        width: 100%;
+        border: none;
+        border-bottom: 1px dashed #bbb;
+        padding: 10px 5px;
+        font-size: 15px;
+        outline: none;
+        background: transparent;
+    }
+
+    .input-field::placeholder {
+        color: #aaa;
+    }
+
+    select {
+        width: 100%;
+        border: none;
+        border-bottom: 1px dashed #bbb;
+        padding: 12px 5px;
+        font-size: 15px;
+        outline: none;
+        background: transparent;
+        color: #666;
+    }
+
+    .btn-register {
+        width: 100%;
+        background: #000;
+        color: white;
+        padding: 13px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 35px;
+        cursor: pointer;
+    }
+
+    .login-text {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #444;
+    }
+
+    .login-text a {
+        color: #000;
+        font-weight: bold;
+        text-decoration: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='images/cyber1.jpg') }}" class="logo">
+
+    <form action="/inscription" method="POST" onsubmit="return verifierFormulaire()">
+
+        <label class="label">Pays</label>
+        <select name="country" required>
+            <option value="">Sélectionnez votre pays</option>
+            <option value="Togo">🇹🇬 Togo</option>
+            <option value="Bénin">🇧🇯 Bénin</option>
+            <option value="Côte d'Ivoire">🇨🇮 Côte d’Ivoire</option>
+            <option value="Cameroun">🇨🇲 Cameroun</option>
+            <option value="Mali">🇲🇱 Mali</option>
+            <option value="Gabon">🇬🇦 Gabon</option>
+            <option value="Sénégal">🇸🇳 Sénégal</option>
+            <option value="Niger">🇳🇪 Niger</option>
+            <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+            <option value="Congo Kinshasa">🇨🇩 Congo kinshasa</option>
+            <option value="Congo Brazzaville">🇨🇬 Congo Brazzaville</option>
+        </select>
+
+        <label class="label">Numéro de téléphone</label>
+        <input type="tel" name="phone" class="input-field" placeholder="Votre numéro" required>
+
+        <label class="label">Mot de passe</label>
+        <input type="password" name="password" id="password" class="input-field" placeholder="Mot de passe" required>
+
+        <label class="label">Confirmer le mot de passe</label>
+        <input type="password" name="confirm_password" id="confirm_password" class="input-field" placeholder="Confirmez" required>
+
+        <label class="label">Code d’invitation</label>
+        <input type="text"
+               name="code_invitation"
+               class="input-field"
+               value="{{ code_ref }}"
+               placeholder="Code d’invitation"
+               {% if code_ref %} readonly style="background:#eee;" {% endif %}>
+
+        <button class="btn-register">S’inscrire</button>
+    </form>
+
+    <p class="login-text">
+        Vous avez déjà un compte ?
+        <a href="{{ url_for('connexion_page') }}">Se connecter</a>
+    </p>
+
+</div>
+
+<script>
+function verifierFormulaire() {
+    const p1 = document.getElementById("password").value.trim();
+    const p2 = document.getElementById("confirm_password").value.trim();
+
+    if (p1 !== p2) {
+        alert("❌ Les mots de passe ne correspondent pas !");
+        return false;
+    }
+
+    if (p1.length < 4) {
+        alert("⚠️ Le mot de passe doit contenir au moins 4 caractères.");
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

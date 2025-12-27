@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CYBER-TRUCK</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: #fff;
+            padding-bottom: 90px;
+        }
+
+        /* IMAGE HAUT */
+        .dashboard-header img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 0 0 20px 20px;
+        }
+
+        /* SOLDE */
+        .account-info {
+            display: flex;
+            justify-content: space-around;
+            background: #FFD700;
+            color: #000;
+            padding: 15px 0;
+            border-radius: 0 0 18px 18px;
+        }
+
+        .account-info small {
+            color: #000;
+            font-size: 13px;
+        }
+
+        .account-info strong {
+            display: block;
+            margin-top: 3px;
+            font-size: 17px;
+        }
+
+        /* MENU ICONES */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            padding: 25px 10px;
+            text-align: center;
+        }
+
+        .icon-item {
+            font-size: 13px;
+            color: #222;
+            cursor: pointer;
+        }
+
+        .icon-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #FFD700; /* JAUNE YOUKI */
+        }
+
+        /* CARTES */
+        .cards-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .card-box {
+            position: relative;
+            height: 110px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 8px;
+        }
+
+        .card-value {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .card-title {
+            font-size: 12px;
+        }
+
+        /* NAVIGATION BAS */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #999;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a.active {
+            color: #000;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #FFD700; /* JAUNE YOUKI */
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- IMAGE -->
+    <div class="dashboard-header">
+        <img src="{{ url_for('static', filename='images/you1.jpg') }}">
+    </div>
+
+    <!-- SOLDE -->
+    <div class="account-info">
+        <div>
+            <small>Compte 1</small>
+            <strong>{{ "{:,.0f}".format(user.solde_total or 0)|replace(",", " ") }} XOF</strong>
+        </div>
+        <div>
+            <small>Compte 2</small>
+            <strong>{{ "{:,.0f}".format(user.solde_revenu or 0)|replace(",", " ") }} XOF</strong>
+        </div>
+    </div>
+
+    <!-- MENU -->
+    <div class="icon-grid">
+        <div class="icon-item" onclick="location.href='/deposit'">
+            <i class="fa-solid fa-wallet"></i>
+            Recharger
+        </div>
+
+        <div class="icon-item" onclick="location.href='/retrait'">
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            Retrait
+        </div>
+
+        <div class="icon-item" onclick="location.href='https://t.me/YoukiAgent'">
+            <i class="fa-solid fa-headset"></i>
+            Aide
+        </div>
+
+        <div class="icon-item" onclick="location.href='/annonce'">
+            <i class="fa-solid fa-circle-check"></i>
+            Cadeaux
+        </div>
+    </div>
+
+    <!-- CARTES -->
+    <div class="cards-row">
+        <div class="card-box">
+            <img src="{{ url_for('static', filename='images/you.jpg') }}">
+            <div class="card-overlay">
+                <div class="card-value">
+                    {{ "{:,.0f}".format(user.solde_total or 0)|replace(",", " ") }} XOF
+                </div>
+                <div class="card-title">Solde du compte</div>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <img src="{{ url_for('static', filename='images/you2.jpg') }}">
+            <div class="card-overlay">
+                <div class="card-value">XOF 0</div>
+                <div class="card-title">Revenu d’aujourd’hui</div>
+            </div>
+        </div>
+
+        <div class="card-box">
+            <img src="{{ url_for('static', filename='images/you3.jpg') }}">
+            <div class="card-overlay">
+                <div class="card-value">
+                    {{ "{:,.0f}".format(user.solde_revenu or 0)|replace(",", " ") }} XOF
+                </div>
+                <div class="card-title">Revenu cumulé</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION BAS -->
+<div class="bottom-nav">
+    <a href="/dashboard" class="active">
+        <i class="fa-solid fa-house"></i>
+        Maison
+    </a>
+    <a href="/produits_rapide">
+        <i class="fa-solid fa-box"></i>
+        Produit
+    </a>
+    <a href="/team">
+        <i class="fa-solid fa-users"></i>
+        Équipe
+    </a>
+    <a href="/profile">
+        <i class="fa-solid fa-user"></i>
+        Le mien
+    </a>
+</div>
+
+</body>
+</html>

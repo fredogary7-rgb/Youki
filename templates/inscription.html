@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscription - Youki</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(#fafafa, #e5e5e5);
+}
+
+/* CONTENEUR */
+.container{
+    max-width:420px;
+    margin:0 auto;
+    padding:20px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.back{
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* LOGOS */
+.logos{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:30px 0;
+}
+
+.logo-youki{
+    font-size:28px;
+    font-weight:800;
+    color:#e10600;
+}
+
+.logo-text{
+    font-size:26px;
+    font-weight:700;
+    color:#888;
+}
+
+/* INPUTS */
+.input-box{
+    background:#fff;
+    border-radius:12px;
+    padding:16px;
+    margin-bottom:16px;
+    box-shadow:0 2px 6px rgba(0,0,0,.05);
+}
+
+.input-box input,
+.input-box select{
+    width:100%;
+    border:none;
+    outline:none;
+    font-size:15px;
+    background:transparent;
+}
+
+/* BOUTON */
+.btn{
+    margin-top:25px;
+}
+
+.btn button{
+    width:100%;
+    background:#e10600;
+    color:#fff;
+    border:none;
+    padding:16px;
+    border-radius:30px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(225,6,0,.35);
+}
+
+/* TEXTE BAS */
+.bottom-text{
+    text-align:center;
+    margin-top:25px;
+    font-size:14px;
+}
+
+.bottom-text a{
+    color:#000;
+    font-weight:700;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <span class="back" onclick="history.back()">←</span>
+    </div>
+
+    <!-- LOGOS -->
+    <div class="logos">
+        <div class="logo-youki">YOUKI</div>
+        <div class="logo-text">Inscription</div>
+    </div>
+
+    <!-- FORMULAIRE -->
+    <form action="/inscription" method="POST" onsubmit="return verifierFormulaire()">
+
+        <div class="input-box">
+            <select name="country" required>
+                <option value="">Sélectionnez votre pays &gt;&gt;</option>
+                <option value="Togo">🇹🇬 Togo</option>
+                <option value="Bénin">🇧🇯 Bénin</option>
+                <option value="Côte d'Ivoire">🇨🇮 Côte d’Ivoire</option>
+                <option value="Cameroun">🇨🇲 Cameroun</option>
+                <option value="Mali">🇲🇱 Mali</option>
+                <option value="Sénégal">🇸🇳 Sénégal</option>
+                <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+            </select>
+        </div>
+
+        <div class="input-box">
+            <input type="tel" name="phone" placeholder="Veuillez entrer votre numéro de portable" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" id="password" name="password" placeholder="Mot de passe de connexion" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Répéter le mot de passe" required>
+        </div>
+
+        <div class="input-box">
+            <input type="text"
+                   name="code_invitation"
+                   placeholder="Code de parrainage"
+                   value="{{ code_ref }}"
+                   {% if code_ref %} readonly style="background:#f3f3f3;" {% endif %}>
+        </div>
+
+        <div class="btn">
+            <button type="submit">Inscrivez-vous maintenant</button>
+        </div>
+
+    </form>
+
+    <!-- CONNEXION -->
+    <div class="bottom-text">
+        Déjà inscrit ?
+        <a href="{{ url_for('connexion_page') }}">Connectez-vous</a>
+    </div>
+
+</div>
+
+<script>
+function verifierFormulaire(){
+    const p1 = document.getElementById("password").value;
+    const p2 = document.getElementById("confirm_password").value;
+
+    if(p1 !== p2){
+        alert("Les mots de passe ne correspondent pas");
+        return false;
+    }
+
+    if(p1.length < 4){
+        alert("Mot de passe trop court");
+        return false;
+    }
+    return true;
+}
+</script>
+
+</body>
+</html>

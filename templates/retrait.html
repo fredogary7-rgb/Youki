@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrait</title>
+
+<style>
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f4f5f7;
+    margin:0;
+}
+
+/* ===== HEADER NOIR ===== */
+.header{
+    background:linear-gradient(180deg,#000,#111);
+    color:#fff;
+    padding:22px 18px 26px;
+    border-radius:0 0 22px 22px;
+}
+
+.header-top{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+}
+
+.header-top span{
+    font-weight:600;
+}
+
+.solde{
+    margin-top:12px;
+    font-size:34px;
+    font-weight:800;
+}
+
+.solde span{
+    font-size:22px;
+    font-weight:600;
+}
+
+.sous-solde{
+    color:#f5c400; /* JAUNE YOUKI */
+    font-size:14px;
+    margin-top:4px;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:#fff;
+    margin:18px;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+}
+
+.wallet{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #eee;
+    margin-bottom:18px;
+}
+
+.wallet strong{
+    font-size:18px;
+}
+
+/* ===== INPUT ===== */
+label{
+    font-weight:600;
+    display:block;
+    margin-bottom:6px;
+}
+
+.input-group{
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    padding-bottom:6px;
+}
+
+.input-group span{
+    font-weight:600;
+    margin-right:6px;
+}
+
+input{
+    border:none;
+    outline:none;
+    width:100%;
+    font-size:16px;
+    padding:8px 0;
+}
+
+/* ===== INFO ===== */
+.info-line{
+    display:flex;
+    justify-content:space-between;
+    margin-top:12px;
+    font-weight:600;
+}
+
+.info-line .taxe{
+    color:#f5c400;
+}
+
+/* ===== BUTTON ===== */
+.btn{
+    background:linear-gradient(90deg,#f5c400,#ffdd00);
+    color:#000;
+    padding:16px;
+    width:88%;
+    margin:24px auto;
+    text-align:center;
+    display:block;
+    border-radius:30px;
+    font-weight:800;
+    border:none;
+    font-size:16px;
+}
+
+/* ===== INSTRUCTIONS ===== */
+.rules{
+    margin:10px 18px 40px;
+    color:#999;
+    font-size:14px;
+    line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-top">
+        ← <span>Retrait</span>
+    </div>
+
+    <div class="solde">
+        <span>XOF</span> {{ "{:,.0f}".format(solde_total).replace(",", " ") }}
+    </div>
+
+    <div class="sous-solde">Solde du compte</div>
+</div>
+
+<form method="POST">
+
+    <!-- ===== CARD ===== -->
+    <div class="card">
+
+        <div class="wallet" onclick="window.location.href='/ajouter_portefeuille'">
+            <div>
+                {{ user.wallet_country }} • {{ user.wallet_operator }}<br>
+                <strong>{{ user.wallet_number }}</strong>
+            </div>
+            ➜
+        </div>
+
+        <label>Montant du retrait</label>
+        <div class="input-group">
+            <span>XOF</span>
+            <input
+                type="number"
+                name="montant"
+                id="montant"
+                placeholder="Veuillez entrer le montant"
+                required>
+        </div>
+
+        <div class="info-line">
+            <div id="netText">Montant reçu : XOF 0.00</div>
+            <div class="taxe">Impôt : 15%</div>
+        </div>
+
+    </div>
+
+    <button class="btn" type="submit">
+        Retirer de l'argent maintenant
+    </button>
+
+</form>
+
+<!-- ===== INSTRUCTIONS ===== -->
+<div class="rules">
+    <p>1. Le montant minimum de retrait est de 1 000 FCFA.</p>
+    <p>2. Plusieurs retraits sont autorisés par jour.</p>
+    <p>3. Des frais de retrait de 15 % s'appliquent.</p>
+    <p>4. Les retraits sont généralement disponibles sous 2 heures.</p>
+    <p>5. Veuillez vérifier les informations de votre portefeuille.</p>
+</div>
+
+<!-- ===== JS INTACT ===== -->
+<script>
+document.getElementById("montant").addEventListener("input", function() {
+    let montant = parseFloat(this.value);
+    if (isNaN(montant) || montant <= 0) {
+        document.getElementById("netText").innerHTML =
+            "Montant reçu : XOF 0.00";
+        return;
+    }
+
+    let taxe = montant * 0.15;
+    let net = montant - taxe;
+
+    document.getElementById("netText").innerHTML =
+        "Montant reçu : <b>XOF " + net.toLocaleString('fr-FR') + "</b>";
+});
+</script>
+
+</body>
+</html>

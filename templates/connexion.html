@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion - Youki</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Poppins', sans-serif;
+    background: linear-gradient(#ffffff, #e6e6e6);
+}
+
+/* CONTENEUR */
+.container{
+    max-width:420px;
+    margin:0 auto;
+    padding:20px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.back{
+    font-size:26px;
+    cursor:pointer;
+}
+
+/* LOGOS */
+.logos{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:30px 0 40px;
+}
+
+.logo-youki{
+    font-size:30px;
+    font-weight:800;
+    color:#e10600;
+}
+
+.logo-text{
+    font-size:26px;
+    font-weight:700;
+    color:#bdbdbd;
+}
+
+/* INPUT BOX */
+.input-box{
+    background:#fff;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:18px;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+}
+
+.input-box input,
+.input-box select{
+    width:100%;
+    border:none;
+    outline:none;
+    font-size:15px;
+    background:transparent;
+    color:#333;
+}
+
+/* BOUTON */
+.btn{
+    margin-top:30px;
+}
+
+.btn button{
+    width:100%;
+    background:#e10600;
+    color:#fff;
+    border:none;
+    padding:17px;
+    border-radius:35px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(225,6,0,.35);
+}
+
+/* TEXTE BAS */
+.bottom-text{
+    text-align:center;
+    margin-top:25px;
+    font-size:14px;
+    color:#444;
+}
+
+.bottom-text a{
+    color:#000;
+    font-weight:700;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <span class="back" onclick="history.back()">←</span>
+    </div>
+
+    <!-- LOGOS -->
+    <div class="logos">
+        <div class="logo-youki">YOUKI</div>
+        <div class="logo-text">Connexion</div>
+    </div>
+
+    <!-- FORMULAIRE -->
+    <form action="/connexion" method="POST">
+
+        <div class="input-box">
+            <select name="country_code" required>
+                <option value="">Sélectionnez votre pays &gt;&gt;</option>
+                <option value="+228">🇹🇬 Togo</option>
+                <option value="+229">🇧🇯 Bénin</option>
+                <option value="+225">🇨🇮 Côte d’Ivoire</option>
+                <option value="+237">🇨🇲 Cameroun</option>
+                <option value="+223">🇲🇱 Mali</option>
+                <option value="+221">🇸🇳 Sénégal</option>
+                <option value="+226">🇧🇫 Burkina Faso</option>
+            </select>
+        </div>
+
+        <div class="input-box">
+            <input type="tel" name="phone" placeholder="Veuillez entrer votre numéro de portable" required>
+        </div>
+
+        <div class="input-box">
+            <input type="password" name="password" placeholder="Veuillez entrer votre mot de passe" required>
+        </div>
+
+        <div class="btn">
+            <button type="submit">Connectez-vous maintenant</button>
+        </div>
+
+    </form>
+
+    <!-- INSCRIPTION -->
+    <div class="bottom-text">
+        Pas de compte ?
+        <a href="{{ url_for('inscription_page') }}">Créer un compte</a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compte de retrait</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f3f4f6;
+        }
+
+        .header {
+            padding: 15px;
+            background: #FFD700;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;                                                                                                              gap: 10px;
+        }
+
+        .card {
+            background: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        label {
+            font-weight: 600;
+            margin-top: 15px;
+            display: block;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            font-size: 15px;
+        }
+
+        .btn {
+            background: #FFD700;
+            color: black;
+            width: 90%;
+            padding: 15px;
+            margin: 25px auto;
+            display: block;
+            text-align: center;
+            border-radius: 30px;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    ← Compte de retrait
+</div>
+
+<div class="card">
+    <form method="POST">
+
+        <label>Pays</label>
+        <select name="country" required>
+            <option value="">Choisissez votre pays</option>
+            <option value="Togo">🇹🇬 Togo</option>
+            <option value="Bénin">🇧🇯 Bénin</option>
+            <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
+            <option value="Cameroun">🇨🇲 Cameroun</option>
+            <option value="Mali">🇲🇱 Mali</option>
+            <option value="Gabon">🇬🇦 Gabon</option>
+            <option value="Sénégal">🇸🇳 Sénégal</option>
+            <option value="Niger">🇳🇪 Niger</option>
+            <option value="Burkina Faso">🇧🇫 Burkina Faso</option>
+            <option value="Congo Kinshasa">🇨🇩 Congo Kinshasa</option>
+            <option value="Congo Brazzaville">🇨🇬 Congo Brazzaville</option>
+        </select>
+
+        <label>Opérateur Mobile</label>
+        <select name="operator" required>
+            <option value="">Sélectionnez un opérateur</option>
+            <option value="Moov">Moov Money</option>
+            <option value="TMoney">TMoney</option>
+            <option value="Orange Money">Orange Money</option>
+            <option value="MTN Money">MTN Money</option>
+            <option value="Momo CI">Momo CI</option>
+            <option value="Airtel Money">Airtel Money</option>
+        </select>
+
+        <label>Numéro de retrait</label>
+        <input type="tel" name="number" placeholder="Exemple : 90 12 34 56" required>
+
+        <button type="submit" class="btn">Enregistrer</button>
+    </form>
+</div>
+
+</body>
+</html>

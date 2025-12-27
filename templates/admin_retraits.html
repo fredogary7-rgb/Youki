@@ -1,0 +1,29 @@
+<h2>Liste des retraits</h2>
+<table border="1" width="100%">
+    <tr>
+        <th>ID</th>
+        <th>Numéro</th>
+        <th>Montant</th>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in retraits %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.phone }}</td>
+        <td>{{ r.montant }}</td>
+        <td>{{ r.statut }}</td>
+        <td>{{ r.date.strftime("%d/%m/%Y %H:%M") }}</td>
+        <td>
+            {% if r.statut == "en_attente" %}
+                <a href="/admin/retraits/valider/{{ r.id }}">Valider</a> |
+                <a href="/admin/retraits/refuser/{{ r.id }}">Refuser</a>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmer achat</title>
+
+<style>
+body {
+    background: #FFD700;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.card {
+    background: #FFD700;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.btn {
+    background: black;
+    color: #FFD700;
+    padding: 15px;
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 30px;
+    border: none;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.btn-cancel {
+    background: #ccc;
+    color: #FFD700;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+    <img src="{{ url_for('static', filename='images/' + p.image) }}"
+         style="width:120px; height:120px; border-radius:12px; object-fit:cover;">
+
+    <h2>{{ p.nom }}</h2>
+
+    <p>Période : <b>14 jours</b></p>
+    <p>Prix : <b>{{ p.prix }} FCFA</b></p>
+
+    <h3>Détails</h3>
+    <p>Revenu quotidien : <b>+ {{ p.revenu_journalier }}</b></p>
+    <p>Revenu total : <b>+ {{ revenu_total }}</b></p>
+
+</div>
+
+<a href="/produits_rapide">
+<button class="btn btn-cancel">Annuler</button>
+</a>
+
+<form method="POST" action="/produits_rapide/valider/{{ p.id }}">
+    <button class="btn" type="submit">Payer</button>
+</form>
+
+</body>
+</html>

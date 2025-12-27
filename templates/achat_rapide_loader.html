@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">                                                              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Achat en cours...</title>
+
+<style>
+body {
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+#loader {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#toast {
+    display: none;
+    position: fixed;
+    background: #FFD700;
+    color: black;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+
+<div id="toast">Achat confirmé avec succès !</div>
+
+<script>
+setTimeout(() => {
+    document.getElementById("toast").style.display = "block";
+}, 1000);
+
+setTimeout(() => {
+    window.location.href = "/dashboard";
+}, 2000);
+</script>
+
+</body>
+</html>

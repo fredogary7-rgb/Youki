@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mon équipe</title>
+
+<style>
+:root{
+    --blue:#0b57d0;
+    --yellow:#f4d03f;
+    --bg:#f5f6f8;
+    --card:#ffffff;
+    --text:#111;
+    --muted:#8a8a8a;
+}
+
+body{
+    margin:0;
+    font-family:Poppins, Inter, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+/* ===== PAGE ===== */
+.page{
+    padding:16px 14px 90px;
+    max-width:760px;
+    margin:auto;
+}
+
+/* ===== HEADER ===== */
+.page-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.page-title a{
+    background:var(--blue);
+    color:#fff;
+    text-decoration:none;
+    padding:8px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:var(--card);
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:14px;
+    box-shadow:0 3px 12px rgba(0,0,0,.04);
+}
+
+/* ===== CODE + LIEN ===== */
+.invite-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.invite-info{
+    flex:1;
+}
+
+.invite-info .value{
+    font-size:20px;
+    font-weight:700;
+}
+
+.invite-info .label{
+    font-size:13px;
+    color:var(--blue);
+}
+
+.invite-btn{
+    background:var(--blue);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:20px;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+}
+
+/* ===== STATS GRADIENT ===== */
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.stat{
+    padding:18px 14px;
+    border-radius:14px;
+    color:#fff;
+    text-align:center;
+}
+
+.stat.blue{
+    background:linear-gradient(90deg,#1e5ed8,#3b82f6);
+}
+
+.stat.yellow{
+    background:linear-gradient(90deg,#f4c430,#f9e79f);
+    color:#000;
+}
+
+.stat .num{
+    font-size:22px;
+    font-weight:800;
+}
+
+.stat .label{
+    font-size:13px;
+    margin-top:6px;
+}
+
+/* ===== TABLE ===== */
+.table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+}
+
+.table th{
+    text-align:left;
+    color:#555;
+    font-weight:600;
+    padding:10px 0;
+}
+
+.table td{
+    padding:12px 0;
+    border-top:1px solid #eee;
+}
+
+/* ===== BONUS ===== */
+.bonus-title{
+    font-weight:700;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.bonus-title::before{
+    content:"";
+    width:4px;
+    height:18px;
+    background:var(--blue);
+    border-radius:2px;
+}
+
+.bonus p{
+    font-size:14px;
+    color:#666;
+    line-height:1.6;
+}
+
+/* ===== NAV BOTTOM ===== */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#fff;
+    border-top:1px solid #ddd;
+    display:flex;
+    justify-content:space-around;
+    padding:8px 0;
+}
+
+.bottom-nav a{
+    text-decoration:none;
+    color:#555;
+    font-size:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.bottom-nav a i{
+    font-size:20px;
+    margin-bottom:2px;
+    color:#000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- TITRE -->
+    <div class="page-title">
+        <div>Règles relatives aux récompenses des promoteurs</div>
+        <a href="#">Mon équipe ></a>
+    </div>
+
+    <!-- CODE -->
+    <div class="card">
+        <div class="invite-row">
+            <div class="invite-info">
+                <div class="value" id="refCode">{{ referral_code }}</div>
+                <div class="label">Code d'invitation</div>
+            </div>
+            <button class="invite-btn" onclick="copyText('#refCode')">Copier le code</button>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="invite-row">
+            <div class="invite-info">
+                <div class="value" style="font-size:14px" id="refLink">{{ referral_link }}</div>
+                <div class="label">Lien d'invitation</div>
+            </div>
+            <button class="invite-btn" onclick="copyText('#refLink')">Copier le lien</button>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+        <div class="stat blue">
+            <div class="num">{{ stats.level1 + stats.level2 + stats.level3 }}</div>
+            <div class="label">Nombre d'invités</div>
+        </div>
+        <div class="stat yellow">
+            <div class="num">FCFA {{ "{:,.0f}".format(stats.commissions_total)|replace(",", " ") }}</div>
+            <div class="label">Revenus sur invitation</div>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Taux de commission</th>
+                    <th>Nombre d'invités</th>
+                    <th>Revenu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Équipe de niveau 1 25%</td>
+                    <td>{{ stats.level1 }}</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Équipe de niveau 2 4%</td>
+                    <td>{{ stats.level2 }}</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Équipe de niveau 3 1%</td>
+                    <td>{{ stats.level3 }}</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BONUS -->
+    <div class="card bonus">
+        <div class="bonus-title">Bonus d'invitation</div>
+        <p>Lorsqu'un ami que vous invitez s'inscrit et investit, vous recevez immédiatement une récompense en espèces de 25 %.</p>
+        <p>Lorsque les membres de votre équipe de niveau 2 investissent, vous recevez 4 %.</p>
+        <p>Lorsque les membres de votre équipe de niveau 3 investissent, vous recevez 1 %.</p>
+    </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="bottom-nav">
+    <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+    <a href="/investissements"><i class="fa-solid fa-box"></i>Projet</a>
+    <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+    <a href="/profile"><i class="fa-solid fa-user"></i>Le mien</a>
+</div>
+
+<script>
+function copyText(selector){
+    const el = document.querySelector(selector);
+    const text = el.textContent.trim();
+    navigator.clipboard.writeText(text).then(()=>{
+        alert("Copié ✔️");
+    });
+}
+</script>
+
+</body>
+</html>

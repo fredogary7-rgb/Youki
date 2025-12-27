@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produits rapides</title>
+
+<style>
+body {
+    background: #f5f5f5;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======= CARD PRODUIT ======= */
+.card {
+    background: #ffffff;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.12);
+    border: 1px solid #eee;
+}
+
+/* ======= IMAGE ======= */
+.card img {
+    width: 105px;
+    height: 105px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+/* ======= TITRE ======= */
+h3 {
+    margin: 0 0 6px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* TEXTES */
+p {
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+/* ======= BOUTON ACHAT ======= */
+.btn-buy {
+    background: linear-gradient(45deg, #FF8A00, #FF2D00);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0px 3px 8px rgba(255,80,0,0.4);
+    transition: 0.2s;
+}
+
+.btn-buy:hover {
+    transform: scale(1.05);
+}
+
+/* Conteneur bouton */
+.btn-area {
+    display: flex;
+    align-items: center;
+}
+</style>
+
+</head>
+<body>
+
+{% for p in produits %}
+<div class="card">
+
+    <!-- IMAGE -->
+    <img src="{{ url_for('static', filename='images/' + (p.image if p.image else 'cyber1.jpg')) }}" alt="produit">
+
+    <!-- INFORMATIONS PRODUIT -->
+    <div style="flex:1;">
+        <h3>{{ p.nom }}</h3>
+
+        <p>Période : <b>60 jours</b></p>
+        <p>Revenu quotidien : <b>{{ p.revenu_journalier }} FCFA</b></p>
+        <p>Prix : <b>{{ p.prix }} FCFA</b></p>
+    </div>
+
+    <!-- BOUTON D'ACHAT TOUJOURS VISIBLE -->
+    <div class="btn-area">
+
+        <a href="/produits_rapide/confirmer/{{ p.id }}">
+            <button class="btn-buy">Payer</button>
+        </a>
+
+    </div>
+
+</div>
+{% endfor %}
+
+</body>
+</html>

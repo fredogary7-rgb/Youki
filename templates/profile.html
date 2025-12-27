@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil</title>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: white;
+        margin: 0;
+    }
+
+    .user-box {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        background: #FFD700;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .user-img {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .user-info .phone {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .balance {
+        display: block;
+        margin-top: 5px;
+        color: #444;
+        font-size: 14px;
+    }
+
+    /* --- BOUTONS RECHARGER / RETRAIT --- */
+    .actions {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px 15px;
+        background: white;
+        border-bottom: 1px solid #ddd;
+        gap: 15px;
+    }
+
+    .btn {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        border-radius: 14px;
+        font-weight: bold;
+        color: black;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-recharge {
+        background: #FFD700;
+    }
+
+    .btn-retrait {
+        background: #FFD700;
+    }
+
+    /* --- MENU --- */
+    .menu {
+        margin-top: 10px;
+        background: #FFD700;
+        padding: 10px 0;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        font-size: 15px;
+    }
+
+    .menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .menu-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .menu-left img {
+        width: 22px;
+        height: 22px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .logout {
+        color: red;
+        font-weight: bold;
+    }
+
+        /* --- NAVIGATION BAS --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #555;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bottom-nav a i {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #000;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 480px) {
+            .dashboard-header img {
+                height: 170px;
+            }
+        }
+
+</style>
+</head>
+
+<body>
+
+<!-- IDENTITÉ UTILISATEUR -->
+<div class="user-box">
+    <img src="{{ url_for('static', filename='images/you.jpg') }}" class="user-img">
+
+    <div class="user-info">
+        <div class="phone">{{ user.phone }}</div>
+        <span class="balance">Solde : {{ "{:,.0f}".format(user.solde_total or 0) }} XOF</span>
+    </div>
+</div>
+
+<!-- BOUTONS -->
+<div class="actions">
+    <a href="/deposit">
+        <button class="btn btn-recharge">Faire un recharge</button>
+    </a>
+
+    <a href="/retrait">
+        <button class="btn btn-retrait">Retirer de l'argent</button>
+    </a>
+</div>
+
+<!-- MENU -->
+<div class="menu">
+
+    <a href="https://t.me/+UglZI6fn5_IyOTJk" target="_blank">
+        <div class="menu-item">
+            <div class="menu-left">
+                <!-- Icône Telegram officiel -->
+                <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+                <span>Chaîne Telegram</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+
+    <a href="/historique">
+        <div class="menu-item">
+            <div class="menu-left">
+                <!-- Icône historique officiel -->
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828970.png">
+                <span>Historique des produits</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+    <a href="https://whatsapp.com/channel/0029VbC6ssCHAdNV8VXoCQ0D">
+        <div class="menu-item">
+            <div class="menu-left">
+                <!-- Icône service client PRO -->
+                <img src="https://cdn-icons-png.flaticon.com/512/5974/5974636.png">
+                <span>Chaîne Whatsapp</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+
+
+    <a href="/logout">
+        <div class="menu-item logout">
+            <div class="menu-left">
+                <!-- Icône logout officiel -->
+                <img src="https://cdn-icons-png.flaticon.com/512/4400/4400828.png">
+                <span>Déconnexion</span>
+            </div>
+            <span>›</span>
+        </div>
+    </a>
+
+</div>
+
+    <!-- NAVIGATION DU BAS -->
+    <div class="bottom-nav">
+        <a href="/dashboard"><i class="fa-solid fa-house"></i>Maison</a>
+        <a href="/investissements"><i class="fa-solid fa-box"></i>Produits</a>
+        <a href="/team"><i class="fa-solid fa-users"></i>Équipe</a>
+        <a href="/profile"><i class="fa-solid fa-user"></i>Moi</a>
+    </div>
+
+</body>
+</html>
