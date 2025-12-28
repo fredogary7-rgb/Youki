@@ -33,13 +33,13 @@
         <!-- ACTIONS -->
         <td>
             {% if d.statut != "valide" %}
-                <a href="/admin/deposits/valider/{{ d.id }}" style="color:green>
+                <a href="/admin/deposits/valider/{{ d.id }}" style="color:green; font-weight:bold; margin-right:10px;">
                     Valider
                 </a>
             {% endif %}
 
             {% if d.statut != "rejete" %}
-                <a href="/admin/deposits/rejeter/{{ d.id }}" style="color:red; >
+                <a href="/admin/deposits/rejeter/{{ d.id }}" style="color:red; font-weight:bold;">
                     Rejeter
                 </a>
             {% endif %}
@@ -47,4 +47,5 @@
     </tr>
     {% endfor %}
 </table>
+
 
