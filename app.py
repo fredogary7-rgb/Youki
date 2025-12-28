@@ -1,18 +1,21 @@
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 import uuid
-
+from datetime import datetime, timedelta
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "ma_cle_ultra_secrete"
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 UPLOAD_FOLDER = "static/vlogs"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-
 # URL PostgreSQL (Neon)
 DATABASE_URL = "postgresql://neondb_owner:npg_NYzc6Ap8gHah@ep-tiny-moon-abgyer8p-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require"
 
@@ -44,26 +47,53 @@ def add_reference_column():
         """))
         conn.commit()
     print("✅ Colonne 'reference' ajoutée si elle n'existait pas.")
-class User(db.Model):
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.String(50), unique=True, nullable=False, default=lambda: str(uuid.uuid4()))
+
+    # =====================
+    # Identifiants
+    # =====================
+    uid = db.Column(
+        db.String(50),
+        unique=True,
+        nullable=False,
+        default=lambda: str(uuid.uuid4())
+    )
 
     phone = db.Column(db.String(30), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
-    parrain = db.Column(db.String(30), nullable=True)   # 🔥 colonne correcte
+    # =====================
+    # Parrainage
+    # =====================
+    parrain = db.Column(db.String(30), nullable=True)
     commission_total = db.Column(db.Float, default=0.0)
 
+    # =====================
+    # Portefeuille
+    # =====================
     wallet_country = db.Column(db.String(50))
     wallet_operator = db.Column(db.String(50))
     wallet_number = db.Column(db.String(30))
 
+    # =====================
+    # Soldes
+    # =====================
     solde_total = db.Column(db.Float, default=0.0)
     solde_depot = db.Column(db.Float, default=0.0)
     solde_parrainage = db.Column(db.Float, default=0.0)
     solde_revenu = db.Column(db.Float, default=0.0)
+
     premier_depot = db.Column(db.Boolean, default=False)
 
+    # =====================
+    # Lucky Spin
+    # =====================
+    spin_chances = db.Column(db.Integer, default=1)
+    last_spin_gain = db.Column(db.Float, default=0.0)
+
+    # =====================
     date_creation = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Depot(db.Model):
@@ -194,6 +224,33 @@ def verifier_investissements(phone):
 
             db.session.commit()
 
+
+import random
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
+# --------------------------
+# Fonction de tirage pondéré
+# --------------------------
+def weighted_choice():
+    gains = [
+        (3000, 10),
+        (5400, 7),
+        (7200, 6),
+        (12000, 5),
+        (22800, 4),
+        (52800, 1.5),
+        (112800, 1),
+        (532800, 0.1)
+    ]
+
+    pool = []
+    for gain, weight in gains:
+        pool.extend([gain] * int(weight * 10))
+    return random.choice(pool)
+
+
 @app.cli.command("init-db")
 def init_db():
     db.create_all()
@@ -248,6 +305,8 @@ def inscription_page():
     # 🔥 Passe le code au HTML
     return render_template("inscription.html", code_ref=code_ref)
 
+from flask_login import login_user
+
 @app.route("/connexion", methods=["GET", "POST"])
 def connexion_page():
     if request.method == "POST":
@@ -269,7 +328,8 @@ def connexion_page():
             flash("❌ Mot de passe incorrect.", "danger")
             return redirect(url_for("connexion_page"))
 
-        session["phone"] = user.phone
+        # ✅ CONNEXION FLASK-LOGIN
+        login_user(user)
 
         flash("Connexion réussie ✅", "success")
         return redirect(url_for("dashboard_page"))
@@ -572,6 +632,7 @@ def retrait_page():
         solde_retraitable=solde_retraitable
     )
 
+
 @app.route("/retrait/confirmation/<int:montant>", methods=["GET", "POST"])
 @login_required
 def retrait_confirmation_page(montant):
@@ -635,6 +696,54 @@ def retrait_confirmation_page(montant):
         net=net,
         user=user
     )
+
+from flask_login import login_required, current_user
+from flask import request, render_template, flash
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
+
+
+@app.route("/lucky-spin", methods=["GET", "POST"])
+@login_required
+def lucky_spin():
+
+    # Sécurisation des valeurs
+    if current_user.spin_chances is None:
+        current_user.spin_chances = 1
+
+    if current_user.solde_total is None:
+        current_user.solde_total = 0
+
+    if current_user.solde_revenu is None:
+        current_user.solde_revenu = 0
+
+    # Déjà joué
+    if current_user.spin_chances <= 0:
+        db.session.commit()
+        flash("❌ Vous avez déjà participé au Lucky Spin", "danger")
+        return render_template("lucky_spin.html", blocked=True)
+
+    # Action POST (spin)
+    if request.method == "POST":
+        gain = weighted_choice()
+
+        current_user.solde_revenu += gain
+        current_user.spin_chances = 0
+
+        db.session.commit()
+
+        flash(f"🎉 Félicitations ! Vous avez gagné {gain} XOF", "success")
+        return render_template(
+            "lucky_spin.html",
+            result=gain,
+            blocked=True
+        )
+
+    # GET normal
+    db.session.commit()
+    return render_template("lucky_spin.html", blocked=False)
 
 @app.route("/profile")
 @login_required

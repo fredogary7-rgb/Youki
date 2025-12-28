@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmation du retrait</title>
+
+<style>
+body {
+    background: #FFD700;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.card {
+    background: white;
+    margin: 25px;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    font-size: 16px;
+}
+
+.btn {
+    background: #FFD700;
+    color: black;
+    padding: 15px;
+    width: 90%;
+    margin: 25px auto;
+    text-align: center;
+    display: block;
+    border-radius: 30px;
+    font-weight: bold;
+    border: none;
+}
+
+/* --- Effet de chargement --- */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* --- Toast succès --- */
+#toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: black;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: 16px;
+    display: none;
+    z-index: 10000;
+}
+</style>
+</head>
+<body>
+
+<h2>Confirmer le retrait</h2>
+
+<div class="card">
+
+    <div class="row">
+        <span>Montant demandé :</span>
+        <strong>{{ montant }} FCFA</strong>
+    </div>
+
+    <div class="row">
+        <span>Impôt (15%) :</span>
+        <strong>{{ taxe }} FCFA</strong>
+    </div>
+
+    <div class="row">
+        <span>Montant reçu :</span>
+        <strong>{{ net }} FCFA</strong>
+    </div>
+
+    <hr style="margin: 20px 0;">
+
+    <h3>Portefeuille</h3>
+    <p><strong>{{ user.wallet_country }} • {{ user.wallet_operator }}</strong><br>
+    {{ user.wallet_number }}</p>
+
+</div>
+
+<form method="POST" action="/retrait/confirmation/{{ montant }}" onsubmit="startProcess()">
+    <button class="btn" type="submit">Confirmer le retrait</button>
+</form>
+
+<!-- LOADER -->
+<div id="loader">Traitement en cours...</div>
+
+<!-- TOAST SUCCÈS -->
+<div id="toast">Retrait soumis avec succès</div>
+
+<script>
+function startProcess() {
+    // bloque la page
+    document.getElementById("loader").style.display = "flex";
+
+    // après 1 seconde, affiche le succès
+    setTimeout(() => {
+        document.getElementById("toast").style.display = "block";
+    }, 1000);
+
+    // après 2 secondes, redirection
+    setTimeout(() => {
+        window.location.href = "/dashboard";
+    }, 2000);
+}
+
+{% if success %}
+    // lancer automatiquement le loader & toast après validation serveur
+    startProcess();
+{% endif %}
+</script>
+</body>
+</html>
