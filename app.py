@@ -289,8 +289,8 @@ def inscription_page():
         new_user = User(
             phone=phone,
             password=password,
-            solde_total=0,
-            solde_depot=0,
+            solde_total=500,
+            solde_depot=500,
             solde_revenu=0,
             solde_parrainage=0,
             parrain=parrain_user.phone if parrain_user else None
