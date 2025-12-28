@@ -184,6 +184,13 @@ body{
 <div class="result">🎉 Gain : {{ result }} XOF</div>
 {% endif %}
 
+{% if need_invest %}
+<div class="alert alert-warning">
+    ⚠️ Vous devez effectuer un investissement actif pour débloquer le Lucky Spin.
+</div>
+<a href="/investir" class="btn btn-primary">Investir maintenant</a>
+{% endif %}
+
 <!-- ===== CONDITIONS ===== -->
 <div class="table">
     <div class="row">

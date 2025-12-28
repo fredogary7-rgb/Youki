@@ -145,6 +145,127 @@
             margin-bottom: 2px;
             color: #FFD700; /* JAUNE YOUKI */
         }
+
+        /* --- WIDGET STATISTIQUES --- */
+.stats-widget {
+    width: 92%;
+    margin: 20px auto 120px auto;
+    background: #ff2d00;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.stats-title {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.stat-card {
+    background: #f6f6f6;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: #555;
+}
+
+.stat-value {
+    margin-top: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===== NOTIFICATION ===== */
+.notify-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.65);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+.notify-box{
+    background:#fff;
+    width:90%;
+    max-width:420px;
+    border-radius:20px;
+    padding:25px 20px 30px;
+    text-align:center;
+    position:relative;
+    animation:popIn .4s ease;
+}
+
+@keyframes popIn{
+    from{transform:scale(.8); opacity:0}
+    to{transform:scale(1); opacity:1}
+}
+
+.notify-close{
+    position:absolute;
+    top:12px;
+    right:14px;
+    border:none;
+    background:none;
+    font-size:26px;
+    cursor:pointer;
+}
+
+.notify-title{
+    color:#1e5eff;
+    font-size:26px;
+    margin-bottom:15px;
+}
+
+.notify-text{
+    font-size:14px;
+    color:#333;
+    margin-bottom:15px;
+}
+
+.notify-list{
+    text-align:left;
+    font-size:14px;
+    color:#333;
+    margin:0 0 20px;
+    padding-left:18px;
+}
+
+.notify-list li{
+    margin-bottom:8px;
+}
+
+.notify-list span{
+    color:#e60000;
+    font-weight:700;
+}
+
+.notify-btn{
+    display:block;
+    background:#1e5eff;
+    color:white;
+    text-decoration:none;
+    padding:14px;
+    border-radius:12px;
+    font-weight:700;
+    box-shadow:0 6px 12px rgba(0,0,0,.25);
+}
     </style>
 </head>
 
@@ -225,6 +346,26 @@
 
 </div>
 
+
+<!-- WIDGET STATISTIQUES (correct position) -->
+<div class="stats-widget">
+    <div class="stats-title">Notre Evolution</div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Users</span>
+            <span class="stat-value">{{ total_users }}</span>
+        </div>
+
+
+        <div class="stat-card">
+            <span class="stat-label">Invest</span>
+            <span class="stat-value">{{ "{:,.0f}".format(total_invested)|replace(",", " ") }} XOF</span>
+        </div>
+
+    </div>
+</div>
+
 <!-- NAVIGATION BAS -->
 <div class="bottom-nav">
     <a href="/dashboard" class="active">
@@ -243,6 +384,36 @@
         <i class="fa-solid fa-user"></i>
         Le mien
     </a>
+</div>
+
+<!-- ===== NOTIFICATION MODAL ===== -->
+<div id="notifyOverlay" class="notify-overlay">
+    <div class="notify-box">
+        <button class="notify-close" onclick="closeNotify()">×</button>
+
+        <h2 class="notify-title">Notification</h2>
+
+        <p class="notify-text">
+
+            <li> Youki = <span>vous souhaite une </span> bonne année 2026</li
+>
+            <strong>Youki+</strong> est une plateforme innovante qui vous permet de
+            gagner de l'argent grâce à des bonus, parrainages et opportunités exclusives.
+        </p>
+
+        <ul class="notify-list">
+            <li>🎁 Bonus d'inscription : <span>500 FCFA</span></li>
+            <li>💸 Retrait minimum : <span>1000 FCFA</span></li>
+            <li>👥 Parrainage sur 3 niveaux :
+                <span>25 %, 4 % et 1 %</span>
+            </li>
+            <li>⏱ Retraits disponibles à tout moment</li>
+        </ul>
+
+        <a href="https://t.me/+UglZI6fn5_IyOTJk" target="_blank" class="notify-btn">
+            Rejoindre le groupe Telegram
+        </a>
+    </div>
 </div>
 
 </body>

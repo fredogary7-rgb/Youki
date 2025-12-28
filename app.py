@@ -310,7 +310,6 @@ from flask_login import login_user
 @app.route("/connexion", methods=["GET", "POST"])
 def connexion_page():
     if request.method == "POST":
-
         phone = request.form.get("phone", "").strip()
         password = request.form.get("password", "").strip()
 
@@ -320,27 +319,29 @@ def connexion_page():
 
         user = User.query.filter_by(phone=phone).first()
 
-        if not user:
-            flash("❌ Numéro introuvable.", "danger")
+        if not user or user.password != password:
+            flash("❌ Numéro ou mot de passe incorrect.", "danger")
             return redirect(url_for("connexion_page"))
 
-        if user.password != password:
-            flash("❌ Mot de passe incorrect.", "danger")
-            return redirect(url_for("connexion_page"))
-
-        # ✅ CONNEXION FLASK-LOGIN
+        # ✅ Connexion Flask-Login
         login_user(user)
 
+        # ✅ Mettre en session ton phone pour tes autres sections
+        session["phone"] = user.phone
+
         flash("Connexion réussie ✅", "success")
+
+        # ✅ Redirection vers dashboard
         return redirect(url_for("dashboard_page"))
 
     return render_template("connexion.html")
 
 @app.route("/logout")
 def logout_page():
-    session.clear()
+    logout_user()   # ✅ OBLIGATOIRE
     flash("Déconnexion effectuée.", "info")
     return redirect(url_for("connexion_page"))
+
 
 PRODUITS_VIP = [
     {"id": 1, "nom": "VIP 1", "prix": 3000, "revenu_journalier": 500, "image": "you3.jpg"},
@@ -709,40 +710,44 @@ def load_user(user_id):
 @login_required
 def lucky_spin():
 
-    # Sécurisation des valeurs
+    # 🔐 Vérifier si l'utilisateur a un investissement actif
+    investissement_actif = Investissement.query.filter_by(
+        phone=current_user.phone,
+        actif=True
+    ).first()
+
+    if not investissement_actif:
+        flash("❌ Vous devez d'abord investir avant de tourner la roue.", "danger")
+        return render_template("lucky_spin.html", blocked=True, need_invest=True)
+
+    # Initialisation sécurisée
     if current_user.spin_chances is None:
         current_user.spin_chances = 1
-
-    if current_user.solde_total is None:
-        current_user.solde_total = 0
 
     if current_user.solde_revenu is None:
         current_user.solde_revenu = 0
 
-    # Déjà joué
+    # Déjà utilisé
     if current_user.spin_chances <= 0:
-        db.session.commit()
-        flash("❌ Vous avez déjà participé au Lucky Spin", "danger")
+        flash("❌ Vous avez déjà participé au Lucky Spin.", "danger")
         return render_template("lucky_spin.html", blocked=True)
 
-    # Action POST (spin)
+    # 🎯 Tourner la roue
     if request.method == "POST":
-        gain = weighted_choice()
+        gain = weighted_choice()  # ⚠️ la fonction doit exister
 
         current_user.solde_revenu += gain
         current_user.spin_chances = 0
 
         db.session.commit()
 
-        flash(f"🎉 Félicitations ! Vous avez gagné {gain} XOF", "success")
+        flash(f"🎉 Félicitations ! Vous avez gagné {gain} FCFA", "success")
         return render_template(
             "lucky_spin.html",
             result=gain,
             blocked=True
         )
 
-    # GET normal
-    db.session.commit()
     return render_template("lucky_spin.html", blocked=False)
 
 @app.route("/profile")
